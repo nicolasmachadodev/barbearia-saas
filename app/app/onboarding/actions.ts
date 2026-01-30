@@ -32,19 +32,15 @@ export async function createShopAndSetActive(
     return { error: "Sessão inválida. Faça login novamente." };
   }
 
-  const { data: shopId, error } = await supabase.rpc(
-    "create_shop_and_owner",
-    { p_name: name, p_slug: slug }
-  );
+  const { data: shopId, error } = await supabase.rpc("create_shop_and_owner", {
+    p_name: name,
+    p_slug: slug,
+  });
 
-  if (error) {
-    return { error: error.message };
-  }
+  if (error) return { error: error.message };
+  if (!shopId) return { error: "Não foi possível criar a barbearia." };
 
-  if (!shopId) {
-    return { error: "Não foi possível criar a barbearia." };
-  }
-
+  // ✅ NO SEU NEXT: cookies() É Promise, então precisa await
   const cookieStore = await cookies();
   cookieStore.set(ACTIVE_SHOP_ID_COOKIE, String(shopId), {
     httpOnly: true,
@@ -53,7 +49,6 @@ export async function createShopAndSetActive(
     secure: process.env.NODE_ENV === "production",
     maxAge: ACTIVE_SHOP_COOKIE_MAX_AGE,
   });
-  
-  // 🚀 Redireciona com cookie já persistido
+
   redirect("/app");
 }

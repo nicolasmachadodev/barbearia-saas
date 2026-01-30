@@ -1,33 +1,17 @@
-import { createClient } from "@/src/lib/supabase/server";
+import { redirect } from "next/navigation";
 import { getActiveShopId } from "@/src/lib/shop";
 
 export default async function AppPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
   const activeShopId = await getActiveShopId();
 
-  let activeShopName: string | null = null;
-  if (activeShopId) {
-    const { data: shop } = await supabase
-      .from("shops")
-      .select("name")
-      .eq("id", activeShopId)
-      .single();
-    activeShopName = shop?.name ?? null;
+  if (!activeShopId) {
+    redirect("/app/onboarding");
   }
 
   return (
-    <div>
-      <p className="mb-4 text-neutral-600 dark:text-neutral-400">
-        Você está autenticado. Esta rota está protegida pelo middleware.
-      </p>
-      {activeShopName && (
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          Barbearia ativa: <strong>{activeShopName}</strong>
-        </p>
-      )}
+    <div style={{ padding: 24, color: "white" }}>
+      <h1>Área do app</h1>
+      <p>Barbearia ativa carregada com sucesso.</p>
     </div>
   );
 }
