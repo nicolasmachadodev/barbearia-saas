@@ -1,18 +1,13 @@
-import { redirect } from 'next/navigation'
-import { getActiveShopId } from '../src/lib/shop'
+import { redirect } from "next/navigation";
+import { createClient } from "@/src/lib/supabase/server";
 
+export default async function HomePage() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
-export default async function AppPage() {
-  const activeShopId = await getActiveShopId()
+  // Se estiver logado, manda pro app
+  if (user) redirect("/app");
 
-  if (!activeShopId) {
-    redirect('/app/onboarding')
-  }
-
-  return (
-    <div style={{ padding: '24px', color: 'white' }}>
-      <h1>Área do app</h1>
-      <p>Barbearia ativa carregada com sucesso.</p>
-    </div>
-  )
+  // Se não estiver logado, manda pro login
+  redirect("/auth/login");
 }
