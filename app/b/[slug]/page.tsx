@@ -40,7 +40,7 @@ export default async function Page({
 
     const { data: services } = await admin
         .from("services")
-        .select("id, name, duration_min")
+        .select("id, name, duration_min, price_cents")
         .eq("shop_id", shop.id)
         .eq("is_active", true)
         .order("created_at", { ascending: false });
