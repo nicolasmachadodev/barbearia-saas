@@ -96,6 +96,14 @@ export default async function StaffDetailPage({
           >
             Folgas
           </Link>
+
+          <Link 
+            href={`/app/staff/${id}/slots`}
+            className="text-sm underline"
+          >
+            Horários disponíveis
+          </Link>
+
         </div>
       </div>
 
