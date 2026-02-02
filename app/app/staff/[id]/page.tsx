@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/src/lib/supabase/server";
 import { getActiveShopId } from "@/src/lib/shop";
@@ -42,7 +43,9 @@ export default async function StaffDetailPage({
   if (servicesError) {
     return (
       <div className="p-6">
-        <p className="text-red-500">Erro ao carregar serviços: {servicesError.message}</p>
+        <p className="text-red-500">
+          Erro ao carregar serviços: {servicesError.message}
+        </p>
       </div>
     );
   }
@@ -56,7 +59,9 @@ export default async function StaffDetailPage({
   if (linksError) {
     return (
       <div className="p-6">
-        <p className="text-red-500">Erro ao carregar vínculos: {linksError.message}</p>
+        <p className="text-red-500">
+          Erro ao carregar vínculos: {linksError.message}
+        </p>
       </div>
     );
   }
@@ -65,10 +70,32 @@ export default async function StaffDetailPage({
 
   return (
     <div className="p-6 space-y-6">
-      <div>
+      <div className="space-y-2">
+        <Link href="/app/staff" className="text-sm underline opacity-80">
+          ← Voltar
+        </Link>
+
         <h1 className="text-xl font-semibold">{staff.name}</h1>
+
         <div className="text-sm opacity-80">
           Status: {staff.is_active ? "Ativo" : "Inativo"}
+        </div>
+
+        {/* Links do staff */}
+        <div className="flex gap-3 pt-2">
+          <Link
+            href={`/app/staff/${id}/availability`}
+            className="text-sm underline"
+          >
+            Disponibilidade
+          </Link>
+
+          <Link
+            href={`/app/staff/${id}/time-off`}
+            className="text-sm underline"
+          >
+            Folgas
+          </Link>
         </div>
       </div>
 
